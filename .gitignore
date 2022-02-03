@@ -1,18 +1,19 @@
 # Arborescence générale
-*.one
-*.autosave
+#*.one
+#*.autosave
 *.zip
-*.url
-*/.vs
+#*.url
+#*/.vs
+outils/
 
 # CODE
-*.atsln
-*.bin
-*.componentinfo.xml
-*.eep
-*.elf
-*.hex
-*.lss
-*.map
-*.sym
-*/Debug/
+#*.atsln
+#*.bin
+#*.componentinfo.xml
+#*.eep
+#*.elf
+#*.hex
+#*.lss
+#*.map
+#*.sym
+#*/Debug/
