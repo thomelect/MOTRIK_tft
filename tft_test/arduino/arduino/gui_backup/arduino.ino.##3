@@ -23,9 +23,11 @@
 //<Save_References !Start!>
 gslc_tsElemRef* m_pElemRadial1    = NULL;
 gslc_tsElemRef* m_pElemRamp2_3    = NULL;
-gslc_tsElemRef* m_pElemSpinner2   = NULL;
 gslc_tsElemRef* m_pElemToggle1    = NULL;
+gslc_tsElemRef* m_pElemVal1       = NULL;
+gslc_tsElemRef* m_pElemVal1_2     = NULL;
 gslc_tsElemRef* m_pElemXRingGauge1= NULL;
+gslc_tsElemRef* m_pElemKeyPadNum  = NULL;
 //<Save_References !End!>
 
 // Define debug message function
@@ -58,6 +60,10 @@ bool CbBtnCommon(void* pvGui,void *pvElemRef,gslc_teTouch eTouch,int16_t nX,int1
       case E_ELEM_BTN10:
         gslc_SetPageCur(&m_gui, E_PG3);
         break;
+      case E_ELEM_NUMINPUT2:
+        // Clicked on edit field, so show popup box and associate with this text field
+        gslc_ElemXKeyPadInputAsk(&m_gui, m_pElemKeyPadNum, E_POP_KEYPAD_NUM, m_pElemVal1_2);
+        break;
       case E_ELEM_BTN7:
         gslc_SetPageCur(&m_gui, E_PG1);
         break;
@@ -70,6 +76,10 @@ bool CbBtnCommon(void* pvGui,void *pvElemRef,gslc_teTouch eTouch,int16_t nX,int1
       case E_ELEM_BTN6:
         gslc_SetPageCur(&m_gui, E_PG2);
         break;
+      case E_ELEM_NUMINPUT1:
+        // Clicked on edit field, so show popup box and associate with this text field
+        gslc_ElemXKeyPadInputAsk(&m_gui, m_pElemKeyPadNum, E_POP_KEYPAD_NUM, m_pElemVal1);
+        break;
 //<Button Enums !End!>
       default:
         break;
@@ -79,8 +89,40 @@ bool CbBtnCommon(void* pvGui,void *pvElemRef,gslc_teTouch eTouch,int16_t nX,int1
 }
 //<Checkbox Callback !Start!>
 //<Checkbox Callback !End!>
-//<Keypad Callback !Start!>
-//<Keypad Callback !End!>
+// KeyPad Input Ready callback
+bool CbKeypad(void* pvGui, void *pvElemRef, int16_t nState, void* pvData)
+{
+  gslc_tsGui*     pGui     = (gslc_tsGui*)pvGui;
+  gslc_tsElemRef* pElemRef = (gslc_tsElemRef*)(pvElemRef);
+  gslc_tsElem*    pElem    = gslc_GetElemFromRef(pGui,pElemRef);
+
+  // From the pvData we can get the ID element that is ready.
+  int16_t nTargetElemId = gslc_ElemXKeyPadDataTargetIdGet(pGui, pvData);
+  if (nState == XKEYPAD_CB_STATE_DONE) {
+    // User clicked on Enter to leave popup
+    // - If we have a popup active, pass the return value directly to
+    //   the corresponding value field
+    switch (nTargetElemId) {
+//<Keypad Enums !Start!>
+      case E_ELEM_NUMINPUT2:
+        gslc_ElemXKeyPadInputGet(pGui, m_pElemVal1_2, pvData);
+	    gslc_PopupHide(&m_gui);
+        break;
+      case E_ELEM_NUMINPUT1:
+        gslc_ElemXKeyPadInputGet(pGui, m_pElemVal1, pvData);
+	    gslc_PopupHide(&m_gui);
+        break;
+
+//<Keypad Enums !End!>
+      default:
+        break;
+    }
+  } else if (nState == XKEYPAD_CB_STATE_CANCEL) {
+    // User escaped from popup, so don't update values
+    gslc_PopupHide(&m_gui);
+  }
+  return true;
+}
 // Spinner Input Ready callback
 bool CbSpinner(void* pvGui, void *pvElemRef, int16_t nState, void* pvData)
 {
@@ -94,10 +136,6 @@ bool CbSpinner(void* pvGui, void *pvElemRef, int16_t nState, void* pvData)
     switch (pElem->nId) {
 //<Spinner Enums !Start!>
 
-      case E_ELEM_SPINNER2:
-        //TODO- Add Spinner handling code
-        // using gslc_ElemXSpinnerGetCounter(&m_gui, &m_sXSpinner2);
-        break;
 //<Spinner Enums !End!>
       default:
         break;
