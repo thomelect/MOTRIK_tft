@@ -22,10 +22,17 @@
 //<Save_References !Start!>
 gslc_tsElemRef* m_pElemCounter1   = NULL;
 gslc_tsElemRef* m_pElemCounter2   = NULL;
+gslc_tsElemRef* m_pElemCounter3   = NULL;
 gslc_tsElemRef* m_pElemRadial1    = NULL;
 gslc_tsElemRef* m_pElemRamp2_3    = NULL;
 gslc_tsElemRef* m_pElemToggle1    = NULL;
 gslc_tsElemRef* m_pElemXRingGauge1= NULL;
+gslc_tsElemRef* m_pile1_6         = NULL;
+gslc_tsElemRef* m_pile2_6         = NULL;
+gslc_tsElemRef* m_pile3_6         = NULL;
+gslc_tsElemRef* m_pile4_6         = NULL;
+gslc_tsElemRef* m_pile5_6         = NULL;
+gslc_tsElemRef* m_pile6_6         = NULL;
 //<Save_References !End!>
 
 // Define debug message function

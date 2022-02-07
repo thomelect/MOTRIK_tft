@@ -9,8 +9,6 @@
 //
 //<App !End!>
 
-#define MAX_MESSAGE_LENGTH 4
-
 // ------------------------------------------------
 // Headers to include
 // ------------------------------------------------
@@ -20,27 +18,20 @@
 // Program Globals
 // ------------------------------------------------
 
-int valNum = 0;
-char valNumMsg[4];
-int batValTbl[6] = {0, 17, 33, 50, 66, 83};
-
-void gestionPile(int val);
+int valTest = 0;
+char valTestMsg[4];
+int increment = 1;
+int randomNum;
 
 // Save some element references for direct access
 //<Save_References !Start!>
 gslc_tsElemRef *m_pElemCounter1 = NULL;
+gslc_tsElemRef *m_pElemCounter1_7 = NULL;
 gslc_tsElemRef *m_pElemCounter2 = NULL;
-gslc_tsElemRef *m_pElemCounter3 = NULL;
 gslc_tsElemRef *m_pElemRadial1 = NULL;
 gslc_tsElemRef *m_pElemRamp2_3 = NULL;
 gslc_tsElemRef *m_pElemToggle1 = NULL;
 gslc_tsElemRef *m_pElemXRingGauge1 = NULL;
-gslc_tsElemRef *m_pile1_6 = NULL;
-gslc_tsElemRef *m_pile2_6 = NULL;
-gslc_tsElemRef *m_pile3_6 = NULL;
-gslc_tsElemRef *m_pile4_6 = NULL;
-gslc_tsElemRef *m_pile5_6 = NULL;
-gslc_tsElemRef *m_pile6_6 = NULL;
 //<Save_References !End!>
 
 // Define debug message function
@@ -146,54 +137,32 @@ void loop()
 
   gslc_tsElemRef *pElemRef = NULL;
 
-  // Check to see if anything is available in the serial receive buffer
-  while (Serial.available() > 0)
+  Serial.print(gslc_GetPageCur(&m_gui));
+  /*
+  if (valTest <= 1)
   {
-    // Create a place to hold the incoming message
-    static char message[MAX_MESSAGE_LENGTH];
-    static unsigned int message_pos = 0;
-
-    // Read the next available byte in the serial receive buffer
-    char inByte = Serial.read();
-
-    // Message coming in (check not terminating character) and guard for over message size
-    if (inByte != '\n' && (message_pos < MAX_MESSAGE_LENGTH - 1))
-    {
-      // Add the incoming byte to our message
-      message[message_pos] = inByte;
-      message_pos++;
-    }
-    // Full message received...
-    else
-    {
-      // Add null character to string
-      message[message_pos] = '\0';
-
-      // Print the message (or do other things)
-      Serial.println(message);
-
-      // Or convert to integer and print
-      valNum = atoi(message);
-      Serial.println(valNum);
-
-      // Reset for the next message
-      message_pos = 0;
-    }
+    increment = 1;
   }
-  // randomNum = random(0, 10);
-  gslc_ElemXRingGaugeSetVal(&m_gui, m_pElemXRingGauge1, valNum); // Set initial value
-  gslc_ElemXRadialSetVal(&m_gui, m_pElemRadial1, valNum);
-  gestionPile(valNum);
-  gslc_ElemXRampSetVal(&m_gui, m_pElemRamp2_3, valNum);
+  if (valTest >= 100)
+  {
+    increment = -1;
+  }
+  valTest += increment;
+  */
+  delay(500);
+  randomNum = random(0, 100);
+  gslc_ElemXRampSetVal(&m_gui, m_pElemRamp2_3, randomNum);
+  gslc_ElemXRingGaugeSetVal(&m_gui, m_pElemXRingGauge1, randomNum); // Set initial value
+  gslc_ElemXRadialSetVal(&m_gui, m_pElemRadial1, randomNum);
 
-  sprintf(valNumMsg, "%u%%", valNum);
-  gslc_ElemSetTxtStr(&m_gui, m_pElemCounter1, valNumMsg);
-  gslc_ElemSetTxtStr(&m_gui, m_pElemCounter2, valNumMsg);
-  gslc_ElemSetTxtStr(&m_gui, m_pElemCounter3, valNumMsg);
+  sprintf(valTestMsg, "%u%", randomNum);
+  gslc_ElemSetTxtStr(&m_gui, m_pElemCounter1, valTestMsg);
+  gslc_ElemSetTxtStr(&m_gui, m_pElemCounter1_7, valTestMsg);
+  gslc_ElemSetTxtStr(&m_gui, m_pElemCounter2, valTestMsg);
 
   gslc_ElemSetVisible(&m_gui, m_pElemCounter1, 1);
+  gslc_ElemSetVisible(&m_gui, m_pElemCounter1_7, 1);
   gslc_ElemSetVisible(&m_gui, m_pElemCounter2, 1);
-  gslc_ElemSetVisible(&m_gui, m_pElemCounter3, 1);
 
   // TODO - Add update code for any text, gauges, or sliders
 
@@ -201,49 +170,4 @@ void loop()
   // Periodically call GUIslice update function
   // ------------------------------------------------
   gslc_Update(&m_gui);
-}
-
-void gestionPile(int val)
-{
-  if (val > batValTbl[0])
-  {
-    gslc_ElemSetCol(&m_gui, m_pile1_6, ((gslc_tsColor){255, 51, 0}), ((gslc_tsColor){255, 51, 0}), ((gslc_tsColor){255, 51, 0}));
-  }
-  else
-    gslc_ElemSetCol(&m_gui, m_pile1_6, ((gslc_tsColor){128, 128, 128}), ((gslc_tsColor){128, 128, 128}), ((gslc_tsColor){128, 128, 128}));
-
-  if (val > batValTbl[1])
-  {
-    gslc_ElemSetCol(&m_gui, m_pile2_6, ((gslc_tsColor){255, 153, 0}), ((gslc_tsColor){255, 153, 0}), ((gslc_tsColor){255, 153, 0}));
-  }
-  else
-    gslc_ElemSetCol(&m_gui, m_pile2_6, ((gslc_tsColor){128, 128, 128}), ((gslc_tsColor){128, 128, 128}), ((gslc_tsColor){128, 128, 128}));
-
-  if (val > batValTbl[2])
-  {
-    gslc_ElemSetCol(&m_gui, m_pile3_6, GSLC_COL_YELLOW, GSLC_COL_YELLOW, GSLC_COL_YELLOW);
-  }
-  else
-    gslc_ElemSetCol(&m_gui, m_pile3_6, ((gslc_tsColor){128, 128, 128}), ((gslc_tsColor){128, 128, 128}), ((gslc_tsColor){128, 128, 128}));
-
-  if (val > batValTbl[3])
-  {
-    gslc_ElemSetCol(&m_gui, m_pile4_6, ((gslc_tsColor){204, 255, 0}), ((gslc_tsColor){204, 255, 0}), ((gslc_tsColor){204, 255, 0}));
-  }
-  else
-    gslc_ElemSetCol(&m_gui, m_pile4_6, ((gslc_tsColor){128, 128, 128}), ((gslc_tsColor){128, 128, 128}), ((gslc_tsColor){128, 128, 128}));
-
-  if (val > batValTbl[4])
-  {
-    gslc_ElemSetCol(&m_gui, m_pile5_6, ((gslc_tsColor){102, 255, 0}), ((gslc_tsColor){102, 255, 0}), ((gslc_tsColor){102, 255, 0}));
-  }
-  else
-    gslc_ElemSetCol(&m_gui, m_pile5_6, ((gslc_tsColor){128, 128, 128}), ((gslc_tsColor){128, 128, 128}), ((gslc_tsColor){128, 128, 128}));
-
-  if (val > batValTbl[5])
-  {
-    gslc_ElemSetCol(&m_gui, m_pile6_6, GSLC_COL_GREEN, GSLC_COL_GREEN, GSLC_COL_GREEN);
-  }
-  else
-    gslc_ElemSetCol(&m_gui, m_pile6_6, ((gslc_tsColor){128, 128, 128}), ((gslc_tsColor){128, 128, 128}), ((gslc_tsColor){128, 128, 128}));
 }
