@@ -18,21 +18,20 @@
 // Program Globals
 // ------------------------------------------------
 
+int valTest = 0;
+char valTestMsg[4];
+int increment = 1;
+int randomNum;
+
 // Save some element references for direct access
 //<Save_References !Start!>
-gslc_tsElemRef* m_pElemCounter1   = NULL;
-gslc_tsElemRef* m_pElemCounter2   = NULL;
-gslc_tsElemRef* m_pElemCounter3   = NULL;
-gslc_tsElemRef* m_pElemRadial1    = NULL;
-gslc_tsElemRef* m_pElemRamp2_3    = NULL;
-gslc_tsElemRef* m_pElemToggle1    = NULL;
-gslc_tsElemRef* m_pElemXRingGauge1= NULL;
-gslc_tsElemRef* m_pile1_6         = NULL;
-gslc_tsElemRef* m_pile2_6         = NULL;
-gslc_tsElemRef* m_pile3_6         = NULL;
-gslc_tsElemRef* m_pile4_6         = NULL;
-gslc_tsElemRef* m_pile5_6         = NULL;
-gslc_tsElemRef* m_pile6_6         = NULL;
+gslc_tsElemRef *m_pElemCounter1 = NULL;
+gslc_tsElemRef *m_pElemCounter1_7 = NULL;
+gslc_tsElemRef *m_pElemCounter2 = NULL;
+gslc_tsElemRef *m_pElemRadial1 = NULL;
+gslc_tsElemRef *m_pElemRamp2_3 = NULL;
+gslc_tsElemRef *m_pElemToggle1 = NULL;
+gslc_tsElemRef *m_pElemXRingGauge1 = NULL;
 //<Save_References !End!>
 
 // Define debug message function
@@ -61,7 +60,7 @@ bool CbBtnCommon(void *pvGui, void *pvElemRef, gslc_teTouch eTouch, int16_t nX, 
     // From the element's ID we can determine which button was pressed.
     switch (pElem->nId)
     {
-//<Button Enums !Start!>
+      //<Button Enums !Start!>
     case E_ELEM_BTN9:
       gslc_SetPageCur(&m_gui, E_PG2);
       break;
@@ -87,7 +86,7 @@ bool CbBtnCommon(void *pvGui, void *pvElemRef, gslc_teTouch eTouch, int16_t nX, 
     case E_ELEM_BTN6:
       gslc_SetPageCur(&m_gui, E_PG2);
       break;
-//<Button Enums !End!>
+      //<Button Enums !End!>
     default:
       break;
     }
@@ -135,6 +134,35 @@ void loop()
   // ------------------------------------------------
   // Update GUI Elements
   // ------------------------------------------------
+
+  gslc_tsElemRef *pElemRef = NULL;
+
+  Serial.print(gslc_GetPageCur(&m_gui));
+  /*
+  if (valTest <= 1)
+  {
+    increment = 1;
+  }
+  if (valTest >= 100)
+  {
+    increment = -1;
+  }
+  valTest += increment;
+  */
+  delay(500);
+  randomNum = random(0, 100);
+  gslc_ElemXRampSetVal(&m_gui, m_pElemRamp2_3, randomNum);
+  gslc_ElemXRingGaugeSetVal(&m_gui, m_pElemXRingGauge1, randomNum); // Set initial value
+  gslc_ElemXRadialSetVal(&m_gui, m_pElemRadial1, randomNum);
+
+  sprintf(valTestMsg, "%u%", randomNum);
+  gslc_ElemSetTxtStr(&m_gui, m_pElemCounter1, valTestMsg);
+  gslc_ElemSetTxtStr(&m_gui, m_pElemCounter1_7, valTestMsg);
+  gslc_ElemSetTxtStr(&m_gui, m_pElemCounter2, valTestMsg);
+
+  gslc_ElemSetVisible(&m_gui, m_pElemCounter1, 1);
+  gslc_ElemSetVisible(&m_gui, m_pElemCounter1_7, 1);
+  gslc_ElemSetVisible(&m_gui, m_pElemCounter2, 1);
 
   // TODO - Add update code for any text, gauges, or sliders
 

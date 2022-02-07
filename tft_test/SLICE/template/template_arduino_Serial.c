@@ -9,6 +9,8 @@
 //
 //<App !End!>
 
+#define MAX_MESSAGE_LENGTH 4
+
 // ------------------------------------------------
 // Headers to include
 // ------------------------------------------------
@@ -18,21 +20,17 @@
 // Program Globals
 // ------------------------------------------------
 
+int valNum = 0;
+char valNumMsg[4];
+
 // Save some element references for direct access
 //<Save_References !Start!>
-gslc_tsElemRef* m_pElemCounter1   = NULL;
-gslc_tsElemRef* m_pElemCounter2   = NULL;
-gslc_tsElemRef* m_pElemCounter3   = NULL;
-gslc_tsElemRef* m_pElemRadial1    = NULL;
-gslc_tsElemRef* m_pElemRamp2_3    = NULL;
-gslc_tsElemRef* m_pElemToggle1    = NULL;
-gslc_tsElemRef* m_pElemXRingGauge1= NULL;
-gslc_tsElemRef* m_pile1_6         = NULL;
-gslc_tsElemRef* m_pile2_6         = NULL;
-gslc_tsElemRef* m_pile3_6         = NULL;
-gslc_tsElemRef* m_pile4_6         = NULL;
-gslc_tsElemRef* m_pile5_6         = NULL;
-gslc_tsElemRef* m_pile6_6         = NULL;
+gslc_tsElemRef *m_pElemCounter1 = NULL;
+gslc_tsElemRef *m_pElemCounter2 = NULL;
+gslc_tsElemRef *m_pElemRadial1 = NULL;
+gslc_tsElemRef *m_pElemRamp2_3 = NULL;
+gslc_tsElemRef *m_pElemToggle1 = NULL;
+gslc_tsElemRef *m_pElemXRingGauge1 = NULL;
 //<Save_References !End!>
 
 // Define debug message function
@@ -61,7 +59,7 @@ bool CbBtnCommon(void *pvGui, void *pvElemRef, gslc_teTouch eTouch, int16_t nX, 
     // From the element's ID we can determine which button was pressed.
     switch (pElem->nId)
     {
-//<Button Enums !Start!>
+      //<Button Enums !Start!>
     case E_ELEM_BTN9:
       gslc_SetPageCur(&m_gui, E_PG2);
       break;
@@ -87,7 +85,7 @@ bool CbBtnCommon(void *pvGui, void *pvElemRef, gslc_teTouch eTouch, int16_t nX, 
     case E_ELEM_BTN6:
       gslc_SetPageCur(&m_gui, E_PG2);
       break;
-//<Button Enums !End!>
+      //<Button Enums !End!>
     default:
       break;
     }
@@ -135,6 +133,54 @@ void loop()
   // ------------------------------------------------
   // Update GUI Elements
   // ------------------------------------------------
+
+  gslc_tsElemRef *pElemRef = NULL;
+
+  // Check to see if anything is available in the serial receive buffer
+  while (Serial.available() > 0)
+  {
+    // Create a place to hold the incoming message
+    static char message[MAX_MESSAGE_LENGTH];
+    static unsigned int message_pos = 0;
+
+    // Read the next available byte in the serial receive buffer
+    char inByte = Serial.read();
+
+    // Message coming in (check not terminating character) and guard for over message size
+    if (inByte != '\n' && (message_pos < MAX_MESSAGE_LENGTH - 1))
+    {
+      // Add the incoming byte to our message
+      message[message_pos] = inByte;
+      message_pos++;
+    }
+    // Full message received...
+    else
+    {
+      // Add null character to string
+      message[message_pos] = '\0';
+
+      // Print the message (or do other things)
+      Serial.println(message);
+
+      // Or convert to integer and print
+      valNum = atoi(message);
+      Serial.println(valNum);
+
+      // Reset for the next message
+      message_pos = 0;
+    }
+  }
+  // randomNum = random(0, 10);
+  gslc_ElemXRampSetVal(&m_gui, m_pElemRamp2_3, valNum);
+  gslc_ElemXRingGaugeSetVal(&m_gui, m_pElemXRingGauge1, valNum); // Set initial value
+  gslc_ElemXRadialSetVal(&m_gui, m_pElemRadial1, valNum);
+
+  sprintf(valNumMsg, "%u%%", valNum);
+  gslc_ElemSetTxtStr(&m_gui, m_pElemCounter1, valNumMsg);
+  gslc_ElemSetTxtStr(&m_gui, m_pElemCounter2, valNumMsg);
+
+  gslc_ElemSetVisible(&m_gui, m_pElemCounter1, 1);
+  gslc_ElemSetVisible(&m_gui, m_pElemCounter2, 1);
 
   // TODO - Add update code for any text, gauges, or sliders
 

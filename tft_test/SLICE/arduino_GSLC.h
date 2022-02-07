@@ -56,7 +56,8 @@ enum {E_ELEM_BOX1,E_ELEM_BOX2,E_ELEM_BOX3,E_ELEM_BOX4,E_ELEM_BOX5
       ,E_ELEM_BOX6,E_ELEM_BOX7,E_ELEM_BTN10,E_ELEM_BTN5,E_ELEM_BTN6
       ,E_ELEM_BTN7,E_ELEM_BTN8,E_ELEM_BTN9,E_ELEM_RADIALGAUGE1
       ,E_ELEM_RAMPGAUGE3,E_ELEM_RINGGAUGE1,E_ELEM_TEXT1,E_ELEM_TEXT2
-      ,E_ELEM_TEXT3,E_ELEM_TEXT7,E_ELEM_TEXT8,E_ELEM_TOGGLE1};
+      ,E_ELEM_TEXT3,E_ELEM_TEXT7,E_ELEM_TEXT8,E_ELEM_TEXT9
+      ,E_ELEM_TOGGLE1};
 // Must use separate enum for fonts with MAX_FONT at end to use gslc_FontSet.
 enum {E_BUILTIN5X8,E_FREESANSBOLD12,E_FREESANSBOLD18,E_FREESANSBOLD9
       ,MAX_FONT};
@@ -75,7 +76,7 @@ enum {E_BUILTIN5X8,E_FREESANSBOLD12,E_FREESANSBOLD18,E_FREESANSBOLD9
 #define MAX_ELEM_PG1 7 // # Elems total on page
 #define MAX_ELEM_PG1_RAM MAX_ELEM_PG1 // # Elems in RAM
 
-#define MAX_ELEM_PG2 10 // # Elems total on page
+#define MAX_ELEM_PG2 11 // # Elems total on page
 #define MAX_ELEM_PG2_RAM MAX_ELEM_PG2 // # Elems in RAM
 
 #define MAX_ELEM_PG3 5 // # Elems total on page
@@ -114,10 +115,17 @@ gslc_tsXRamp                    m_sXRampGauge3;
 //<Extern_References !Start!>
 extern gslc_tsElemRef* m_pElemCounter1;
 extern gslc_tsElemRef* m_pElemCounter2;
+extern gslc_tsElemRef* m_pElemCounter3;
 extern gslc_tsElemRef* m_pElemRadial1;
 extern gslc_tsElemRef* m_pElemRamp2_3;
 extern gslc_tsElemRef* m_pElemToggle1;
 extern gslc_tsElemRef* m_pElemXRingGauge1;
+extern gslc_tsElemRef* m_pile1_6;
+extern gslc_tsElemRef* m_pile2_6;
+extern gslc_tsElemRef* m_pile3_6;
+extern gslc_tsElemRef* m_pile4_6;
+extern gslc_tsElemRef* m_pile5_6;
+extern gslc_tsElemRef* m_pile6_6;
 //<Extern_References !End!>
 
 // Define debug message function
@@ -264,26 +272,41 @@ void InitGUIslice_gen()
   // Create E_ELEM_BOX2 box
   pElemRef = gslc_ElemCreateBox(&m_gui,E_ELEM_BOX2,E_PG2,(gslc_tsRect){387,174,26,10});
   gslc_ElemSetCol(&m_gui,pElemRef,GSLC_COL_GREEN,GSLC_COL_GREEN,GSLC_COL_GREEN);
+  m_pile6_6 = pElemRef;
    
   // Create E_ELEM_BOX3 box
   pElemRef = gslc_ElemCreateBox(&m_gui,E_ELEM_BOX3,E_PG2,(gslc_tsRect){374,189,52,10});
   gslc_ElemSetCol(&m_gui,pElemRef,((gslc_tsColor){102,255,0}),((gslc_tsColor){102,255,0}),((gslc_tsColor){102,255,0}));
+  m_pile5_6 = pElemRef;
    
   // Create E_ELEM_BOX4 box
   pElemRef = gslc_ElemCreateBox(&m_gui,E_ELEM_BOX4,E_PG2,(gslc_tsRect){374,204,52,10});
   gslc_ElemSetCol(&m_gui,pElemRef,((gslc_tsColor){204,255,0}),((gslc_tsColor){204,255,0}),((gslc_tsColor){204,255,0}));
+  m_pile4_6 = pElemRef;
    
   // Create E_ELEM_BOX5 box
   pElemRef = gslc_ElemCreateBox(&m_gui,E_ELEM_BOX5,E_PG2,(gslc_tsRect){374,219,52,10});
   gslc_ElemSetCol(&m_gui,pElemRef,GSLC_COL_YELLOW,GSLC_COL_YELLOW,GSLC_COL_YELLOW);
+  m_pile3_6 = pElemRef;
    
   // Create E_ELEM_BOX6 box
   pElemRef = gslc_ElemCreateBox(&m_gui,E_ELEM_BOX6,E_PG2,(gslc_tsRect){374,234,52,10});
   gslc_ElemSetCol(&m_gui,pElemRef,((gslc_tsColor){255,153,0}),((gslc_tsColor){255,153,0}),((gslc_tsColor){255,153,0}));
+  m_pile2_6 = pElemRef;
    
   // Create E_ELEM_BOX7 box
   pElemRef = gslc_ElemCreateBox(&m_gui,E_ELEM_BOX7,E_PG2,(gslc_tsRect){374,249,52,10});
   gslc_ElemSetCol(&m_gui,pElemRef,((gslc_tsColor){255,51,0}),((gslc_tsColor){255,51,0}),((gslc_tsColor){255,51,0}));
+  m_pile1_6 = pElemRef;
+  
+  // Create E_ELEM_TEXT9 runtime modifiable text
+  static char m_sDisplayText9[5] = "100%";
+  pElemRef = gslc_ElemCreateTxt(&m_gui,E_ELEM_TEXT9,E_PG2,(gslc_tsRect){710,5,83,28},
+    (char*)m_sDisplayText9,5,E_FREESANSBOLD18);
+  gslc_ElemSetTxtAlign(&m_gui,pElemRef,GSLC_ALIGN_MID_MID);
+  gslc_ElemSetCol(&m_gui,pElemRef,GSLC_COL_GRAY,((gslc_tsColor){25,70,153}),((gslc_tsColor){25,70,153}));
+  gslc_ElemSetTxtEnc(&m_gui,pElemRef,GSLC_TXT_ENC_UTF8);
+  m_pElemCounter2 = pElemRef;
 
   // -----------------------------------
   // PAGE: E_PG3
@@ -327,7 +350,7 @@ void InitGUIslice_gen()
   gslc_ElemSetTxtAlign(&m_gui,pElemRef,GSLC_ALIGN_MID_MID);
   gslc_ElemSetCol(&m_gui,pElemRef,GSLC_COL_GRAY,((gslc_tsColor){25,70,153}),((gslc_tsColor){25,70,153}));
   gslc_ElemSetTxtEnc(&m_gui,pElemRef,GSLC_TXT_ENC_UTF8);
-  m_pElemCounter2 = pElemRef;
+  m_pElemCounter3 = pElemRef;
   //<InitGUI !End!>
 
   //<Startup !Start!>
