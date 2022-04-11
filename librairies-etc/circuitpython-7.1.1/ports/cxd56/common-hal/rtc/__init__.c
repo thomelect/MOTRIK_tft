@@ -1,1 +1,0 @@
-// No rtc module functions.
