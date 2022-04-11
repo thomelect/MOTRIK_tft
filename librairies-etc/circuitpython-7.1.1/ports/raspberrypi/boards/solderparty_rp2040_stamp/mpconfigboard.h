@@ -1,2 +1,0 @@
-#define MICROPY_HW_BOARD_NAME "RP2040 Stamp"
-#define MICROPY_HW_MCU_NAME "rp2040"
