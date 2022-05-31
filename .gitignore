@@ -7,6 +7,33 @@
 
 # Arborescence générale
 ressources/
+<<<<<<< HEAD
+outils/
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+outils/
+>>>>>>> thomas/DEV
+>>>>>>> DEV
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+
+#Build Directories
+[Dd]ebug/
+[Rr]elease/
+
+#Build Results
+*.o
+*.d
+*.eep
+*.elf
+*.hex
+*.map
+*.srec
+
+=======
 outils/
 
 # Visual Studio 2015/2017 cache/options directory
@@ -25,5 +52,6 @@ outils/
 *.map
 *.srec
 
+>>>>>>> matis/DEV
 #User Specific Files
 *.atsuo
