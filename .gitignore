@@ -7,11 +7,8 @@
 
 # Arborescence générale
 ressources/
-<<<<<<< HEAD
-<<<<<<< HEAD
 =======
 outils/
->>>>>>> thomas/DEV
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -48,6 +45,5 @@ outils/
 *.map
 *.srec
 
->>>>>>> matis/DEV
 #User Specific Files
 *.atsuo
