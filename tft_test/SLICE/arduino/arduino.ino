@@ -15,6 +15,7 @@
 // Headers to include
 // ------------------------------------------------
 #include "arduino_GSLC.h"
+#include "usart_mega.h"
 
 // ------------------------------------------------
 // Program Globals
@@ -80,8 +81,13 @@ bool CbBtnCommon(void *pvGui, void *pvElemRef, gslc_teTouch eTouch, int16_t nX, 
       // TODO Add code for Toggle button ON/OFF state
       if (gslc_ElemXTogglebtnGetState(&m_gui, m_pElemToggle1))
       {
-        ;
+        uint8_t allo[] = {60, 2, 2, 3, 255, 62};
+        usartSendBytes(allo, 6);
+      //Serial.write(allo,6);
       }
+      else
+      
+      Serial.write("Off");
       break;
     case E_ELEM_BTN7:
       gslc_SetPageCur(&m_gui, E_PG1);
@@ -173,7 +179,7 @@ void loop()
       Serial.println(message);
 
       // Or convert to integer and print
-      valNum = atoi(message);
+      valNum = 15;
       Serial.println(valNum);
 
       // Reset for the next message
